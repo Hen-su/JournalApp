@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddEntryActivity"
+    android:orientation="vertical"
+    android:layout_centerHorizontal="true">
+
+    <TextView
+        android:id="@+id/txt_current_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:hint="CurrentDate"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/edt_new_subject"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:hint="Subject: "
+        android:paddingStart="10dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_margin="10dp"/>
+
+    <EditText
+        android:id="@+id/edt_new_entry"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="Entry: "
+        android:paddingStart="10dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_margin="10dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/btn_add_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Entry"/>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"/>
+    </LinearLayout>
+
+
+</LinearLayout>

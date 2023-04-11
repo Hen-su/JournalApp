@@ -34,7 +34,8 @@
         android:layout_margin="20dp"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:hint="*******"
+        android:hint="Password"
+        android:inputType="textPassword"
         android:background="@drawable/edit_text_background"/>
 
     <LinearLayout

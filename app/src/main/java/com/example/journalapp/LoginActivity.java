@@ -8,15 +8,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 public class LoginActivity extends Activity {
-    EditText edtEmail;
-    EditText edtPassword;
+    EditText edtEmail, edtPassword;
     Button btnLogin;
     Button btnCreateAcc;
     TextView txtForgotPass;
+    String userEmail;
+    String userPassword;
+    String userName;
+
+    public static final int REQUEST_CODE = 1;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            userEmail = data.getStringExtra("email");
+            userName = data.getStringExtra("name");
+            userPassword = data.getStringExtra("password");
+        }
+    }
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -32,16 +46,28 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent, 1);
             }
         });
+
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
+                try {
+                    if (email.equals(userEmail) && password.equals(userPassword)) {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("name", userName);
+                        startActivity(intent);
+                    }
+                }
+                catch (Exception e) {
+                    Toast.makeText(LoginActivity.this, "Invalid login", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
