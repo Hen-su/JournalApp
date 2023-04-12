@@ -16,6 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -45,8 +48,9 @@ public class EntryFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        Adapter adapter = new Adapter(EntryFragment.this.getContext(), subject);
+        Adapter adapter = new Adapter(EntryFragment.this.getContext(), subject, date);
         recyclerView.setAdapter(adapter);
+
         fab_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +68,7 @@ public class EntryFragment extends Fragment {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             String newSubject = data.getStringExtra("subject");
             String newEntry = data.getStringExtra("entry");
-            String newDate = data.getStringExtra("date");
+            String newDate = data.getStringExtra("formattedDate");
 
             subject.add(newSubject);
             entry.add(newEntry);

@@ -54,7 +54,8 @@ public class AddEntryActivity extends AppCompatActivity {
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("subject", subject);
                     returnIntent.putExtra("entry", entry);
-                    returnIntent.putExtra("date", currentDate);
+                    returnIntent.putExtra("formattedDate", formattedDate);
+                    returnIntent.putExtra("currentDate", currentDate);
                     setResult(RESULT_OK, returnIntent);
                     Toast.makeText(AddEntryActivity.this, "New entry added", Toast.LENGTH_LONG).show();
                     finish();

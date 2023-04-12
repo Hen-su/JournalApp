@@ -13,12 +13,14 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter {
     TextView itm_subject;
-    ArrayList subject;
+    TextView itm_date;
+    ArrayList subject, date;
     Context context;
 
-    public Adapter(Context context, ArrayList subject) {
+    public Adapter(Context context, ArrayList subject, ArrayList date) {
         this.context = context;
         this.subject = subject;
+        this.date = date;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -26,6 +28,7 @@ public class Adapter extends RecyclerView.Adapter {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itm_subject = (TextView) itemView.findViewById(R.id.itm_subject);
+            itm_date = (TextView) itemView.findViewById(R.id.itm_date);
         }
     }
     @NonNull
@@ -38,8 +41,10 @@ public class Adapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        TextView textView = holder.itemView.findViewById(R.id.itm_subject);
-        textView.setText((String) subject.get(position));
+        TextView subjectView = holder.itemView.findViewById(R.id.itm_subject);
+        TextView dateView = holder.itemView.findViewById(R.id.itm_date);
+        subjectView.setText((String) subject.get(position));
+        dateView.setText((String) date.get(position));
     }
 
     @Override
