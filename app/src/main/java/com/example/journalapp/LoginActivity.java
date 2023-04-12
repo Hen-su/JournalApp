@@ -14,12 +14,8 @@ import androidx.annotation.Nullable;
 
 public class LoginActivity extends Activity {
     EditText edtEmail, edtPassword;
-    Button btnLogin;
-    Button btnCreateAcc;
-    TextView txtForgotPass;
-    String userEmail;
-    String userPassword;
-    String userName;
+    Button btnLogin, btnCreateAcc, btnForgotPassword;
+    String userEmail, userName, userPassword;
 
     public static final int REQUEST_CODE = 1;
     @Override
@@ -42,6 +38,15 @@ public class LoginActivity extends Activity {
         edtPassword = findViewById(R.id.edt_password);
         btnLogin = findViewById(R.id.btn_login);
         btnCreateAcc = findViewById(R.id.btn_create_acc);
+        btnForgotPassword = findViewById(R.id.btn_forgot_password);
+
+        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPassword.class);
+                startActivity(intent);
+            }
+        });
         btnCreateAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,8 +54,6 @@ public class LoginActivity extends Activity {
                 startActivityForResult(intent, 1);
             }
         });
-
-
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -49,7 +49,7 @@ public class AddEntryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String subject = edt_subject.getText().toString();
                 String entry = edt_entry.getText().toString();
-
+                //Returns user input to EntryFragment
                 if (!subject.isEmpty() && !entry.isEmpty()) {
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("subject", subject);

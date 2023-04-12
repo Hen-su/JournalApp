@@ -15,7 +15,7 @@
         android:textSize="30dp"
         android:textStyle="bold"
         android:hint="CurrentDate"
-        android:layout_marginTop="20dp"/>
+        android:layout_margin="20dp"/>
 
     <EditText
         android:id="@+id/edt_new_subject"
@@ -24,22 +24,23 @@
         android:hint="Subject: "
         android:paddingStart="10dp"
         android:background="@drawable/edit_text_background"
-        android:layout_margin="10dp"/>
+        android:layout_margin="20dp"/>
 
     <EditText
         android:id="@+id/edt_new_entry"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:hint="Entry: "
-        android:paddingStart="10dp"
+        android:gravity="top"
+        android:padding="15dp"
         android:background="@drawable/edit_text_background"
-        android:layout_margin="10dp"/>
+        android:layout_margin="20dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="center">
 
         <Button
