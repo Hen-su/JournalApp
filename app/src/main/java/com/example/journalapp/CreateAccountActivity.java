@@ -47,13 +47,10 @@ public class CreateAccountActivity extends AppCompatActivity {
                     Toast.makeText(CreateAccountActivity.this, "The passwords don't match", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    User newUser = new User(name, email, password);
-                    Toast.makeText(CreateAccountActivity.this, name, Toast.LENGTH_LONG).show();
-                    Intent data = new Intent();
-                    data.putExtra("name", name);
-                    data.putExtra("email", email);
-                    data.putExtra("password", password);
-                    setResult(RESULT_OK, data);
+                    DbHandler db = new DbHandler(CreateAccountActivity.this);
+                    db.insertUserDetails(name, email, password);
+
+                    Toast.makeText(CreateAccountActivity.this, "New User has been created", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }

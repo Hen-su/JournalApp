@@ -1,5 +1,9 @@
 package com.example.journalapp;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 public class User {
     private String name;
     private String email;
@@ -29,24 +33,6 @@ public class User {
     }
 
     public User(String name, String email, String password) {
-        /*if (name == null) {
-            throw new Exception("Please enter your name");
-        }
-        else {
-            this.name = name;
-        }
-        if (email == null) {
-            throw new Exception("Please enter your name");
-        }
-        else {
-            this.name = name;
-        }
-        if (password == null) {
-            throw new Exception("Please enter your name");
-        }
-        else {
-            this.name = name;
-        }*/
         this.name = name;
         this.email = email;
         this.password = password;

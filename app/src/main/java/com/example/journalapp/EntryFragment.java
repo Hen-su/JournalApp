@@ -38,6 +38,7 @@ public class EntryFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
         fab_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +81,6 @@ public class EntryFragment extends Fragment {
             String newDate = data.getStringExtra("formattedDate");
 
             buildRecyclerView(newSubject, newDate, newEntry);
-            Toast.makeText(getContext(), "Success", Toast.LENGTH_LONG).show();
         }
     }
     public void buildRecyclerView (String newSubject, String newDate, String newEntry) {

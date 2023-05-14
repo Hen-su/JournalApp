@@ -23,20 +23,9 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
         this.EntryItemArrayListFull = new ArrayList<>(entryItemArrayList);
     }
 
-    // method for filtering our recyclerview items.
-    public void filterList(ArrayList<EntryItem> filterlist) {
-        // below line is to add our filtered
-        // list in our course array list.
-        EntryItemArrayList = filterlist;
-        // below line is to notify our adapter
-        // as change in recycler view data.
-        notifyDataSetChanged();
-    }
-
     @NonNull
     @Override
     public EntryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // below line is to inflate our layout.
         @SuppressLint("ResourceType") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.entry_list_item, parent, false);
         EntryAdapter.ViewHolder viewHolder = new EntryAdapter.ViewHolder(view);
         return viewHolder;
@@ -44,7 +33,6 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull EntryAdapter.ViewHolder holder, int position) {
-        // setting data to our views of recycler view.
         EntryItem entryItem = EntryItemArrayList.get(position);
         holder.date.setText(entryItem.getDate());
         holder.subject.setText(entryItem.getSubject());
@@ -58,13 +46,11 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        // creating variables for our views.
         private final TextView date;
         private final TextView subject;
         private final TextView entry;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            // initializing our views with their ids.
             date = itemView.findViewById(R.id.itm_date);
             subject = itemView.findViewById(R.id.itm_subject);
             entry = itemView.findViewById(R.id.itm_entry);
@@ -91,7 +77,6 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;
-
             return results;
         }
 

@@ -14,15 +14,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
-    Button btn_entries, btn_tasks;
+    TabLayout tabLayout;
+    TabItem entryTab, taskTab;
+    FrameLayout frameLayout;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,27 +34,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String name = getIntent().getStringExtra("name");
         setTitle("Welcome, "+ name);
-
-        btn_entries = findViewById(R.id.btn_entries);
-        btn_tasks = findViewById(R.id.btn_tasks);
+        tabLayout = findViewById(R.id.TabLayout);
+        frameLayout = findViewById(R.id.framelayout);
+        entryTab = findViewById(R.id.EntryTab);
+        taskTab = findViewById(R.id.TaskTab);
         EntryFragment entryFragment = new EntryFragment();
         TasksFragment tasksFragment = new TasksFragment();
-        btn_entries.setOnClickListener(new View.OnClickListener() {
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                replaceFragment(entryFragment);
+            public void onTabSelected(TabLayout.Tab tab) {
+                int tabPosition = tab.getPosition();
+                if(tabPosition == 0) {
+                    replaceFragment(entryFragment);
+                }
+                else if (tabPosition == 1) {
+                    replaceFragment(tasksFragment);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                int tabPosition = tab.getPosition();
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                int tabPosition = tab.getPosition();
             }
         });
-
-        btn_tasks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                replaceFragment(tasksFragment);
-            }
-        });
-
-        btn_entries.performClick();
-
+        TabLayout.Tab tab = tabLayout.getTabAt(0);  // which you want to select.
+        tab.select();
     }
 
     @Override
