@@ -23,11 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TasksFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class TasksFragment extends Fragment {
     private RecyclerView recyclerView;
     private TaskAdapter adapter;

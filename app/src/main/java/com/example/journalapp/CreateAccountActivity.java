@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class CreateAccountActivity extends AppCompatActivity {
 
     EditText edt_name;
@@ -38,6 +42,12 @@ public class CreateAccountActivity extends AppCompatActivity {
                 String name = edt_name.getText().toString();
                 String email = edt_email.getText().toString();
                 String password = edt_password.getText().toString();
+                String hashedPass;
+                try {
+                    hashedPass = encryptString(password);
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
                 String confirmPassword = edt_confirm_pass.getText().toString();
 
                 if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
@@ -48,12 +58,19 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
                 else {
                     DbHandler db = new DbHandler(CreateAccountActivity.this);
-                    db.insertUserDetails(name, email, password);
+                    db.insertUserDetails(name, email, hashedPass);
 
                     Toast.makeText(CreateAccountActivity.this, "New User has been created", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
         });
+    }
+
+    public String encryptString(String input) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] messageDigest = md.digest(input.getBytes());
+        BigInteger bigInt = new BigInteger(1, messageDigest);
+        return bigInt.toString(16);
     }
 }

@@ -1,13 +1,18 @@
 package com.example.journalapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DbHandler extends SQLiteOpenHelper {
 
@@ -85,5 +90,56 @@ public class DbHandler extends SQLiteOpenHelper {
 
         long newRow = db.insert(TABLE_ENTRIES, null, contentValues);
         db.close();
+    }
+
+    @SuppressLint("Range")
+    public HashMap<String, String> getUser(String email){
+        HashMap<String, String> user = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT id, name FROM "+TABLE_USERS+" WHERE "+KEY_USEREMAIL+" = '"+email+"'";
+        Cursor cursor = null;
+        cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        user.put("id", cursor.getString(cursor.getColumnIndex(KEY_ID)));
+        user.put("name", cursor.getString(cursor.getColumnIndex(KEY_USERNAME)));
+        return user;
+    }
+
+    public boolean validateLogin(String useremail, String password){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM "+TABLE_USERS+" WHERE "+KEY_USEREMAIL+" = '"+useremail+"' AND "+KEY_USERPASSWORD+" = '"+password+"'";
+        Cursor cursor = null;
+        cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0){
+            cursor.close();
+            db.close();
+            return true;
+
+        }
+        else {
+            cursor.close();
+            db.close();
+            return false;
+        }
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<HashMap<String, String>> getAllEntries(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<HashMap<String, String>> entryList = new ArrayList<>();
+        String query = "SELECT id, entryDate, entrySubject, entryDescription FROM "+ TABLE_ENTRIES;
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(cursor.moveToNext()){
+            HashMap<String, String> entry = new HashMap<>();
+            entry.put("id", cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            entry.put("date", cursor.getString(cursor.getColumnIndex(KEY_ENTRYDATE)));
+            entry.put("subject", cursor.getString(cursor.getColumnIndex(KEY_ENTRYSUB)));
+            entry.put("description", cursor.getString(cursor.getColumnIndex(KEY_ENTRYDESC)));
+            entryList.add(entry);
+
+        }
+        cursor.close();
+        return entryList;
     }
 }

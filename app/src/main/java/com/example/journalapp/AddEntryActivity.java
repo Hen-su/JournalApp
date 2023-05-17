@@ -3,6 +3,7 @@ package com.example.journalapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,10 +32,19 @@ public class AddEntryActivity extends AppCompatActivity {
         edt_entry = findViewById(R.id.edt_new_entry);
         edt_subject = findViewById(R.id.edt_new_subject);
 
-        LocalDate date = java.time.LocalDate.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("E, dd MMM YYYY");
+        LocalDate date = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            date = LocalDate.now();
+        }
+        DateTimeFormatter dateTimeFormatter = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            dateTimeFormatter = DateTimeFormatter.ofPattern("E, dd MMM YYYY");
+        }
         String currentDate = date.toString();
-        String formattedDate = date.format(dateTimeFormatter).toString();
+        String formattedDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            formattedDate = date.format(dateTimeFormatter).toString();
+        }
         txt_currentDate.setText(formattedDate);
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -44,19 +54,16 @@ public class AddEntryActivity extends AppCompatActivity {
             }
         });
 
+        String finalFormattedDate = formattedDate;
         btn_add_entry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String subject = edt_subject.getText().toString();
-                String entry = edt_entry.getText().toString();
+                String description = edt_entry.getText().toString();
                 //Returns user input to EntryFragment
-                if (!subject.isEmpty() && !entry.isEmpty()) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("subject", subject);
-                    returnIntent.putExtra("entry", entry);
-                    returnIntent.putExtra("formattedDate", formattedDate);
-                    returnIntent.putExtra("currentDate", currentDate);
-                    setResult(RESULT_OK, returnIntent);
+                if (!subject.isEmpty() && !description.isEmpty()) {
+                    DbHandler db = new DbHandler(AddEntryActivity.this);
+                    db.insertEntryDetails(subject, description, finalFormattedDate);
                     Toast.makeText(AddEntryActivity.this, "New entry added", Toast.LENGTH_LONG).show();
                     finish();
                 }

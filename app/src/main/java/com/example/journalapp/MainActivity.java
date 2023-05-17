@@ -8,6 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,18 +24,23 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     TabItem entryTab, taskTab;
     FrameLayout frameLayout;
+    Session session;
+    HashMap<String, String> user;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String name = getIntent().getStringExtra("name");
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("myapp", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        String name = pref.getString("name", null);
         setTitle("Welcome, "+ name);
         tabLayout = findViewById(R.id.TabLayout);
         frameLayout = findViewById(R.id.framelayout);
@@ -40,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
         taskTab = findViewById(R.id.TaskTab);
         EntryFragment entryFragment = new EntryFragment();
         TasksFragment tasksFragment = new TasksFragment();
-
+        session = new Session(this);
+        if(!session.loggedIn()){
+            logout();
+        }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -78,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mnu_logout:
-                finish();
+                logout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -90,5 +101,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.framelayout, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void logout(){
+        session.setLoggedIn(false);
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }

@@ -11,15 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
 
-    private ArrayList<EntryItem> EntryItemArrayList;
-    private ArrayList<EntryItem> EntryItemArrayListFull;
+    private ArrayList<HashMap<String, String>> EntryItemArrayList;
+    private ArrayList<HashMap<String, String>> EntryItemArrayListFull;
 
-    public EntryAdapter(ArrayList<EntryItem> entryItemArrayList, Context context) {
-        this.EntryItemArrayList = entryItemArrayList;
+    public EntryAdapter(ArrayList<HashMap<String, String>> entryItemArrayList, Context context) {
+        DbHandler db = new DbHandler(context.getApplicationContext());
+        this.EntryItemArrayList = db.getAllEntries();
         this.EntryItemArrayListFull = new ArrayList<>(entryItemArrayList);
     }
 
@@ -33,10 +35,10 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull EntryAdapter.ViewHolder holder, int position) {
-        EntryItem entryItem = EntryItemArrayList.get(position);
-        holder.date.setText(entryItem.getDate());
-        holder.subject.setText(entryItem.getSubject());
-        holder.entry.setText(entryItem.getEntry());
+        HashMap<String, String> entryItem = EntryItemArrayList.get(position);
+        holder.date.setText(entryItem.get("date"));
+        holder.subject.setText(entryItem.get("subject"));
+        holder.entry.setText(entryItem.get("description"));
     }
 
     @Override
@@ -55,7 +57,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
             subject = itemView.findViewById(R.id.itm_subject);
             entry = itemView.findViewById(R.id.itm_entry);
         }
-    }
+    } /**
     public Filter getFilter() {
         return entryFilter;
     }
@@ -86,5 +88,5 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
             EntryItemArrayList.addAll((List)results.values);
             notifyDataSetChanged();
         }
-    };
+    };**/
 }
