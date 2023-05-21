@@ -1,16 +1,17 @@
 package com.example.journalapp;
 
-public class TaskItem {
-    String date, name, description;
-    boolean status;
+import android.widget.Button;
 
-    public TaskItem (String date, String name, String description, boolean status) {
+public class TaskItem {
+    String date, name, description, status;
+    Button btnDone;
+
+    public TaskItem (String date, String name, String description, String status) {
         this.date = date;
         this.name = name;
         this.description = description;
         this.status = status;
     }
-
     public String getDate() {
         return date;
     }
@@ -35,11 +36,11 @@ public class TaskItem {
         this.description = description;
     }
 
-    public boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

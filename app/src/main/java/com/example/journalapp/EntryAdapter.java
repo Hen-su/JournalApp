@@ -18,11 +18,13 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
 
     private ArrayList<HashMap<String, String>> EntryItemArrayList;
     private ArrayList<HashMap<String, String>> EntryItemArrayListFull;
+    private EntryAdapter.ItemClickListener mitemClickListener;
 
-    public EntryAdapter(ArrayList<HashMap<String, String>> entryItemArrayList, Context context) {
+    public EntryAdapter(ArrayList<HashMap<String, String>> entryItemArrayList, Context context, ItemClickListener itemClickListener) {
         DbHandler db = new DbHandler(context.getApplicationContext());
         this.EntryItemArrayList = db.getAllEntries();
         this.EntryItemArrayListFull = new ArrayList<>(entryItemArrayList);
+        this.mitemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -39,6 +41,10 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
         holder.date.setText(entryItem.get("date"));
         holder.subject.setText(entryItem.get("subject"));
         holder.entry.setText(entryItem.get("description"));
+
+        holder.itemView.setOnClickListener(view -> {
+            mitemClickListener.onItemClick(entryItem);
+        });
     }
 
     @Override
@@ -57,22 +63,27 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
             subject = itemView.findViewById(R.id.itm_subject);
             entry = itemView.findViewById(R.id.itm_entry);
         }
-    } /**
+    }
+
+    public interface ItemClickListener{
+        void onItemClick(HashMap<String, String> entryItem);
+    }
+
     public Filter getFilter() {
         return entryFilter;
     }
     private Filter entryFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<EntryItem> filteredList = new ArrayList<>();
+            ArrayList<HashMap<String, String>> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(EntryItemArrayListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (EntryItem item : EntryItemArrayListFull) {
-                    if (item.getEntry().toLowerCase().contains(filterPattern)) {
+                for (HashMap<String, String> item : EntryItemArrayListFull) {
+                    if (item.get("description").toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
@@ -88,5 +99,5 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
             EntryItemArrayList.addAll((List)results.values);
             notifyDataSetChanged();
         }
-    };**/
+    };
 }

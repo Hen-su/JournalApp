@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -80,15 +82,15 @@ public class DbHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void insertTaskDetails(String subject, String description, String dueDate, String status){
+    public void insertTaskDetails(String subject, String description, String dueDate){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_TASKSUB, subject);
         contentValues.put(KEY_TASKDESC, description);
         contentValues.put(KEY_TASKDUEDATE, dueDate);
-        contentValues.put(KEY_TASKSTATUS, status);
+        contentValues.put(KEY_TASKSTATUS, "Active");
 
-        long newRow = db.insert(TABLE_ENTRIES, null, contentValues);
+        long newRow = db.insert(TABLE_TASKS, null, contentValues);
         db.close();
     }
 
@@ -141,5 +143,95 @@ public class DbHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         return entryList;
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<HashMap<String, String>> getActiveTasks(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<HashMap<String, String>> taskList = new ArrayList<>();
+        String query = "SELECT id, taskSubject, taskDescription, taskDueDate FROM "+ TABLE_TASKS+" WHERE "+KEY_TASKSTATUS+" = 'Active'";
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(cursor.moveToNext()){
+            HashMap<String, String> task = new HashMap<>();
+            task.put("id", cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            task.put("duedate", cursor.getString(cursor.getColumnIndex(KEY_TASKDUEDATE)));
+            task.put("subject", cursor.getString(cursor.getColumnIndex(KEY_TASKSUB)));
+            task.put("description", cursor.getString(cursor.getColumnIndex(KEY_TASKDESC)));
+            taskList.add(task);
+
+        }
+        cursor.close();
+        return taskList;
+    }
+
+    @SuppressLint("Range")
+    public HashMap<String, String> getSingleEntry(int entryID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        HashMap<String, String> entry = new HashMap<>();
+        String query = "SELECT id, entryDate, entrySubject, entryDescription FROM "+TABLE_ENTRIES+" WHERE "+KEY_ID+" = "+entryID;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()){
+            entry.put("id", cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            entry.put("subject", cursor.getString(cursor.getColumnIndex(KEY_ENTRYSUB)));
+            entry.put("description", cursor.getString(cursor.getColumnIndex(KEY_ENTRYDESC)));
+            cursor.close();
+        }
+        return entry;
+    }
+
+    @SuppressLint("Range")
+    public HashMap<String, String> getSingleTask(int taskID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        HashMap<String, String> task = new HashMap<>();
+        String query = "SELECT id, taskDueDate, taskSubject, taskDescription FROM "+TABLE_TASKS+" WHERE "+KEY_ID+" = "+taskID;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()){
+            task.put("id", cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            task.put("subject", cursor.getString(cursor.getColumnIndex(KEY_TASKSUB)));
+            task.put("description", cursor.getString(cursor.getColumnIndex(KEY_TASKDESC)));
+            cursor.close();
+        }
+        return task;
+    }
+
+    public int updateEntry(int id, String subject, String description){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_ENTRYSUB, subject);
+        contentValues.put(KEY_ENTRYDESC, description);
+
+        int count = db.update(TABLE_ENTRIES, contentValues, KEY_ID+" = ?", new String[]{String.valueOf(id)});
+        return count;
+    }
+    public int updateTask(int id, String duedate, String subject, String description){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_TASKDUEDATE, duedate);
+        contentValues.put(KEY_TASKSUB, subject);
+        contentValues.put(KEY_TASKDESC, description);
+
+        int count = db.update(TABLE_ENTRIES, contentValues, KEY_ID+" = ?", new String[]{String.valueOf(id)});
+        return count;
+    }
+
+    public void updateTaskStatus(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_TASKSTATUS, "Complete");
+        db.update(TABLE_TASKS, contentValues, KEY_ID+" = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteEntry(int entryID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_ENTRIES, KEY_ID+" = ?", new String[]{String.valueOf(entryID)});
+        db.close();
+    }
+
+    public void deleteTask(int taskID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TASKS, KEY_ID+" = ?", new String[]{String.valueOf(taskID)});
+        db.close();
     }
 }

@@ -9,8 +9,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create New Task"
+        android:text="Update Task"
         android:textSize="30dp"
+        android:textStyle="bold"
         android:layout_margin="20dp"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +22,7 @@
         android:layout_marginTop="20dp">
 
         <EditText
-            android:id="@+id/edt_due_date"
+            android:id="@+id/edt_view_duedate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
@@ -30,7 +31,7 @@
             android:padding="15dp"
             android:layout_margin="20dp"/>
         <EditText
-            android:id="@+id/edt_task_name"
+            android:id="@+id/edt_view_taskname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
@@ -38,24 +39,13 @@
             android:padding="15dp"
             android:layout_margin="20dp"/>
         <EditText
-            android:id="@+id/edt_task_desc"
+            android:id="@+id/edt_view_taskdesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
             android:hint="Description"
             android:padding="15dp"
             android:layout_margin="20dp"/>
-
-        <EditText
-            android:id="@+id/edt_task_reminder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Set Reminder"
-            android:background="@drawable/edit_text_background"
-            android:padding="15dp"
-            android:layout_margin="20dp"
-            android:focusable="false"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -64,15 +54,27 @@
         android:gravity="center"
         android:layout_margin="20dp">
         <Button
-            android:id="@+id/btn_task_cancel"
+            android:id="@+id/btn_view_task_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"/>
         <Button
-            android:id="@+id/btn_add_task"
+            android:id="@+id/btn_view_update_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Task"/>
+            android:text="Update Task"
+            android:onClick="updateTask"/>
     </LinearLayout>
+    <Button
+        android:id="@+id/btn_delete_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:text="Delete"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:onClick="deleteTask"/>
 
 </LinearLayout>

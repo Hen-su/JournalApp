@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -22,52 +23,55 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class TasksFragment extends Fragment {
     private RecyclerView recyclerView;
     private TaskAdapter adapter;
-    private ArrayList<TaskItem> taskItemArrayList = new ArrayList<TaskItem>();
+    private ArrayList<HashMap<String, String>> taskItemArrayList;
     private FloatingActionButton fab_add_task;
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
+        DbHandler db = new DbHandler(getContext());
+        taskItemArrayList = db.getActiveTasks();
         fab_add_task = (FloatingActionButton) view.findViewById(R.id.fab_add_task);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_task);
-        adapter = new TaskAdapter(taskItemArrayList, getContext());
+        adapter = new TaskAdapter(taskItemArrayList, getContext(), new TaskAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(HashMap<String, String> taskItem) {
+                Intent intent = new Intent(getContext(), ViewTaskItem.class);
+                int taskID = Integer.valueOf(taskItem.get("id"));
+                Bundle extra = new Bundle();
+                extra.putInt("id", taskID);
+                intent.putExtras(extra);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onMarkDone(HashMap<String, String> taskItem) {
+                int taskID = Integer.valueOf(taskItem.get("id"));
+                db.updateTaskStatus(taskID);
+            }
+        });
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
         fab_add_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddTaskActivity.class);
-                startActivityForResult(intent, 1);
+                startActivity(new Intent(getActivity(), AddTaskActivity.class));
+                adapter.notifyDataSetChanged();
             }
         });
         setHasOptionsMenu(true);
         return view;
     }
-    public static final int REQUEST_CODE = 1;
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            String newDate = data.getStringExtra("date");
-            String newName = data.getStringExtra("name");
-            String newDesc = data.getStringExtra("desc");
-            /*
-            DateTimeFormatter stringDate = DateTimeFormatter.ofPattern("dd/mm/yyyy");
-            DateTimeFormatter dateString = DateTimeFormatter.ofPattern("E, dd MMM yyyy");
-            LocalDate dateObj = LocalDate.parse(newDate, stringDate);
-            String formattedDate = dateObj.format(dateString); */
-            buildRecyclerView(newDate, newName, newDesc, false);
-        }
-    }
-    public void buildRecyclerView (String newDate, String newName, String newDesc, boolean status) {
-        taskItemArrayList.add(new TaskItem(newDate, newName, newDesc, status));
+    public void buildRecyclerView () {
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction().detach(this).commitNow();
         fragmentManager.beginTransaction().attach(this).commitNow();

@@ -38,7 +38,17 @@ public class EntryFragment extends Fragment {
         DbHandler db = new DbHandler(getContext());
         entryItemArrayList = db.getAllEntries();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        adapter = new EntryAdapter(entryItemArrayList, getContext());
+        adapter = new EntryAdapter(entryItemArrayList, getContext(), new EntryAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(HashMap<String, String> entryItem) {
+                Intent intent = new Intent(getContext(), ViewEntryItem.class);
+                int entryID = Integer.valueOf(entryItem.get("id"));
+                Bundle extra = new Bundle();
+                extra.putInt("id", entryID);
+                intent.putExtras(extra);
+                startActivity(intent);
+            }
+        });
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
@@ -53,7 +63,7 @@ public class EntryFragment extends Fragment {
         setHasOptionsMenu(true);
         return view;
     }
-/**
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -73,7 +83,8 @@ public class EntryFragment extends Fragment {
             }
         });
     }
-**/
+
+
     public void buildRecyclerView () {
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction().detach(this).commitNow();

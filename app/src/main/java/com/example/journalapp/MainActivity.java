@@ -74,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 int tabPosition = tab.getPosition();
             }
         });
-        TabLayout.Tab tab = tabLayout.getTabAt(0);  // which you want to select.
-        tab.select();
+        replaceFragment(entryFragment);
     }
 
     @Override
@@ -105,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout(){
         session.setLoggedIn(false);
+        session.getUser().clear();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }
