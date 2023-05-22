@@ -42,32 +42,38 @@ public class CreateAccountActivity extends AppCompatActivity {
                 String name = edt_name.getText().toString();
                 String email = edt_email.getText().toString();
                 String password = edt_password.getText().toString();
-                String hashedPass;
-                try {
-                    hashedPass = encryptString(password);
-                } catch (NoSuchAlgorithmException e) {
-                    throw new RuntimeException(e);
-                }
-                String confirmPassword = edt_confirm_pass.getText().toString();
+                if (password.length() >= 8){
+                    String hashedPass;
+                    try {
+                        hashedPass = encryptString(password);
+                    } catch (NoSuchAlgorithmException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String confirmPassword = edt_confirm_pass.getText().toString();
 
-                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(CreateAccountActivity.this, "Missing fields", Toast.LENGTH_LONG).show();
-                }
-                else if (!password.equals(confirmPassword)) {
-                    Toast.makeText(CreateAccountActivity.this, "The passwords don't match", Toast.LENGTH_LONG).show();
+                    if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                        Toast.makeText(CreateAccountActivity.this, "Missing fields", Toast.LENGTH_LONG).show();
+                    }
+                    else if (!password.equals(confirmPassword)) {
+                        Toast.makeText(CreateAccountActivity.this, "The passwords don't match", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        DbHandler db = new DbHandler(CreateAccountActivity.this);
+                        db.insertUserDetails(name, email, hashedPass);
+
+                        Toast.makeText(CreateAccountActivity.this, "New User has been created", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
                 else {
-                    DbHandler db = new DbHandler(CreateAccountActivity.this);
-                    db.insertUserDetails(name, email, hashedPass);
-
-                    Toast.makeText(CreateAccountActivity.this, "New User has been created", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(CreateAccountActivity.this, "Password must contain minimum 8 characters", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }
 
-    public String encryptString(String input) throws NoSuchAlgorithmException {
+    private String encryptString(String input) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] messageDigest = md.digest(input.getBytes());
         BigInteger bigInt = new BigInteger(1, messageDigest);

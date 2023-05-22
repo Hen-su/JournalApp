@@ -1,5 +1,6 @@
 package com.example.journalapp;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Button;
 
 public class TaskItem {
@@ -12,6 +13,7 @@ public class TaskItem {
         this.description = description;
         this.status = status;
     }
+    public TaskItem(){};
     public String getDate() {
         return date;
     }
@@ -43,4 +45,5 @@ public class TaskItem {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }

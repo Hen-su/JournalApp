@@ -173,6 +173,7 @@ public class DbHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()){
             entry.put("id", cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            entry.put("date", cursor.getString(cursor.getColumnIndex(KEY_ENTRYDATE)));
             entry.put("subject", cursor.getString(cursor.getColumnIndex(KEY_ENTRYSUB)));
             entry.put("description", cursor.getString(cursor.getColumnIndex(KEY_ENTRYDESC)));
             cursor.close();
@@ -188,6 +189,7 @@ public class DbHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()){
             task.put("id", cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            task.put("date", cursor.getString(cursor.getColumnIndex(KEY_TASKDUEDATE)));
             task.put("subject", cursor.getString(cursor.getColumnIndex(KEY_TASKSUB)));
             task.put("description", cursor.getString(cursor.getColumnIndex(KEY_TASKDESC)));
             cursor.close();

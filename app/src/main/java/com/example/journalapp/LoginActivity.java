@@ -22,16 +22,6 @@ public class LoginActivity extends Activity {
     String userEmail, userName, userPassword;
     DbHandler db;
     Session session;
-    public static final int REQUEST_CODE = 1;
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            userEmail = data.getStringExtra("email");
-            userName = data.getStringExtra("name");
-            userPassword = data.getStringExtra("password");
-        }
-    }
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -70,7 +60,9 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 try {
-                    Login();
+                    String email = edtEmail.getText().toString();
+                    String password = edtPassword.getText().toString();
+                    Login(email, password);
                 } catch (NoSuchAlgorithmException e) {
                     throw new RuntimeException(e);
                 }
@@ -79,11 +71,8 @@ public class LoginActivity extends Activity {
         });
     }
 
-    public void Login() throws NoSuchAlgorithmException {
-        String email = edtEmail.getText().toString();
-        String password = edtPassword.getText().toString();
-        String hashedPass = encryptString(password);
-        boolean validation = db.validateLogin(email, hashedPass);
+    public void Login(String email, String password) throws NoSuchAlgorithmException {
+        Boolean validation = validateLogin(password, email);
         if (validation){
             session.setLoggedIn(true);
             session.setUser(db.getUser(email));
@@ -100,5 +89,11 @@ public class LoginActivity extends Activity {
         byte[] messageDigest = md.digest(input.getBytes());
         BigInteger bigInt = new BigInteger(1, messageDigest);
         return bigInt.toString(16);
+    }
+
+    private boolean validateLogin(String password, String email) throws NoSuchAlgorithmException {
+        String hashedPass = encryptString(password);
+        boolean validation = db.validateLogin(email, hashedPass);
+        return validation;
     }
 }

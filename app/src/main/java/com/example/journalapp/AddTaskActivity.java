@@ -17,8 +17,11 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddTaskActivity extends AppCompatActivity {
     private Button btn_add_task, btn_cancel;
@@ -58,8 +61,9 @@ public class AddTaskActivity extends AppCompatActivity {
                     DbHandler db = new DbHandler(getApplicationContext());
                     db.insertTaskDetails(subject, description, duedate);
                     if (edt_reminder.getText().toString()  != null){
+                        //Set reminder
                         String dateTime = edt_reminder.getText().toString();
-                        dateTime.replace('-', ',').replace(':', ',');
+                        dateTime.replace('/', ',').replace(':', ',');
                         String[] dateComponents = dateTime.split(",");
                         Calendar cal = Calendar.getInstance();
                         cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateComponents[0]));
@@ -91,6 +95,7 @@ public class AddTaskActivity extends AppCompatActivity {
         edt_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LocalDate currentDate = null;
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);

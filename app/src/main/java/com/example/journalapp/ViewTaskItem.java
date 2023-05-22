@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class ViewTaskItem extends AppCompatActivity {
     EditText edt_duedate, edt_subject, edt_description;
-    Button btn_cancel;
+    Button btn_cancel, btn_delete;
     Bundle intentBundle;
     int taskID;
     @SuppressLint("MissingInflatedId")
@@ -32,6 +32,7 @@ public class ViewTaskItem extends AppCompatActivity {
         edt_subject = findViewById(R.id.edt_view_taskname);
         edt_description = findViewById(R.id.edt_view_taskdesc);
         btn_cancel = findViewById(R.id.btn_view_task_cancel);
+        btn_delete = findViewById(R.id.btn_delete_task);
 
         edt_duedate.setText(entry.get("date"));
         edt_subject.setText(entry.get("subject"));
@@ -42,21 +43,12 @@ public class ViewTaskItem extends AppCompatActivity {
                 finish();
             }
         });
-    }
 
-    public void updateTask(View view){
-        DbHandler db = new DbHandler(ViewTaskItem.this);
-        String subject = edt_subject.getText().toString();
-        String description = edt_description.getText().toString();
-        String duedate = edt_duedate.getText().toString();
-        db.updateTask(taskID, duedate, subject, description);
-        Toast.makeText(this, "Task "+taskID+" Updated", Toast.LENGTH_SHORT).show();
-    }
-
-    public void deleteTask(View view){
-        DbHandler db = new DbHandler(ViewTaskItem.this);
-        db.deleteEntry(taskID);
-        finish();
-        Toast.makeText(this, "Entry "+taskID+" Deleted", Toast.LENGTH_SHORT).show();
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.deleteTask(taskID);
+            }
+        });
     }
 }

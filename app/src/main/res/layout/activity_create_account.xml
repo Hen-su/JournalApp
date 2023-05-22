@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateAccountActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/act_create_account">
 
     <TextView
         android:layout_width="wrap_content"

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_centerHorizontal="true">
+    android:layout_centerHorizontal="true"
+    android:id="@+id/act_login">
 
     <ImageView
         android:id="@+id/img_login"
@@ -18,11 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/img_login"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Enter your email"
         android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:background="@drawable/edit_text_background" />
+        android:paddingEnd="10dp" />
 
 
     <EditText

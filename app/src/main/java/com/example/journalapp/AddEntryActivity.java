@@ -32,6 +32,42 @@ public class AddEntryActivity extends AppCompatActivity {
         edt_entry = findViewById(R.id.edt_new_entry);
         edt_subject = findViewById(R.id.edt_new_subject);
 
+        String currentDate = getCurrentDate();
+        txt_currentDate.setText(currentDate);
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        String finalFormattedDate = currentDate;
+        btn_add_entry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String subject = edt_subject.getText().toString();
+                String description = edt_entry.getText().toString();
+                addNewEntry(subject, description, finalFormattedDate);
+            }
+        });
+
+    }
+
+    private void addNewEntry(String subject, String description, String finalFormattedDate){
+        //Returns user input to EntryFragment
+        if (!subject.isEmpty() && !description.isEmpty()) {
+            DbHandler db = new DbHandler(AddEntryActivity.this);
+            db.insertEntryDetails(subject, description, finalFormattedDate);
+            Toast.makeText(AddEntryActivity.this, "New entry added", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        else {
+            Toast.makeText(AddEntryActivity.this, "Missing fields", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private String getCurrentDate(){
         LocalDate date = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             date = LocalDate.now();
@@ -45,33 +81,6 @@ public class AddEntryActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             formattedDate = date.format(dateTimeFormatter).toString();
         }
-        txt_currentDate.setText(formattedDate);
-
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        String finalFormattedDate = formattedDate;
-        btn_add_entry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String subject = edt_subject.getText().toString();
-                String description = edt_entry.getText().toString();
-                //Returns user input to EntryFragment
-                if (!subject.isEmpty() && !description.isEmpty()) {
-                    DbHandler db = new DbHandler(AddEntryActivity.this);
-                    db.insertEntryDetails(subject, description, finalFormattedDate);
-                    Toast.makeText(AddEntryActivity.this, "New entry added", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-                else {
-                    Toast.makeText(AddEntryActivity.this, "Missing fields", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
+        return formattedDate;
     }
 }
