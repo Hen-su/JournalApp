@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="25dp"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@drawable/edit_text_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itm_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:hint="Date:" />
+        <TextView
+            android:id="@+id/itm_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:hint="Subject:" />
+
+        <TextView
+            android:id="@+id/itm_entry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Entry"/>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

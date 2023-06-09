@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateAccountActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/act_create_account">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,35 +21,49 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:hint="Enter your name"/>
+        android:hint="Enter your name"
+        android:background="@drawable/edit_text_background"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/edt_new_email"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:hint="Enter your email"/>
+        android:hint="Enter your email"
+        android:background="@drawable/edit_text_background"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/edt_new_password"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:hint="Enter your password"/>
+        android:hint="Enter your password"
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_background"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/edt_confirm_pass"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:hint="Confirm password"/>
+        android:hint="Confirm password"
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_background"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"/>
 
     <Button
-        android:id="@+id/btn_cancel"
+        android:id="@+id/btn_create_acc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:text="Create"
         android:onClick="CreateUser"/>
 

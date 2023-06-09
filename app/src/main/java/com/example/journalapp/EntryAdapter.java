@@ -1,0 +1,103 @@
+package com.example.journalapp;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
+
+    private ArrayList<HashMap<String, String>> EntryItemArrayList;
+    private ArrayList<HashMap<String, String>> EntryItemArrayListFull;
+    private EntryAdapter.ItemClickListener mitemClickListener;
+
+    public EntryAdapter(ArrayList<HashMap<String, String>> entryItemArrayList, Context context, ItemClickListener itemClickListener) {
+        DbHandler db = new DbHandler(context.getApplicationContext());
+        this.EntryItemArrayList = db.getAllEntries();
+        this.EntryItemArrayListFull = new ArrayList<>(entryItemArrayList);
+        this.mitemClickListener = itemClickListener;
+    }
+
+    @NonNull
+    @Override
+    public EntryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        @SuppressLint("ResourceType") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.entry_list_item, parent, false);
+        EntryAdapter.ViewHolder viewHolder = new EntryAdapter.ViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull EntryAdapter.ViewHolder holder, int position) {
+        HashMap<String, String> entryItem = EntryItemArrayList.get(position);
+        holder.date.setText(entryItem.get("date"));
+        holder.subject.setText(entryItem.get("subject"));
+        holder.entry.setText(entryItem.get("description"));
+
+        holder.itemView.setOnClickListener(view -> {
+            mitemClickListener.onItemClick(entryItem);
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        // returning the size of array list.
+        return EntryItemArrayList == null ? 0 : EntryItemArrayList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView date;
+        private final TextView subject;
+        private final TextView entry;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            date = itemView.findViewById(R.id.itm_date);
+            subject = itemView.findViewById(R.id.itm_subject);
+            entry = itemView.findViewById(R.id.itm_entry);
+        }
+    }
+
+    public interface ItemClickListener{
+        void onItemClick(HashMap<String, String> entryItem);
+    }
+
+    public Filter getFilter() {
+        return entryFilter;
+    }
+    private Filter entryFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<HashMap<String, String>> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(EntryItemArrayListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (HashMap<String, String> item : EntryItemArrayListFull) {
+                    if (item.get("description").toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraints, FilterResults results) {
+            EntryItemArrayList.clear();
+            EntryItemArrayList.addAll((List)results.values);
+            notifyDataSetChanged();
+        }
+    };
+}

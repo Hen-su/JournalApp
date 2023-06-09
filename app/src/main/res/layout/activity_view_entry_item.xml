@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddEntryActivity"
+    android:orientation="vertical"
+    android:layout_centerHorizontal="true">
+
+    <TextView
+        android:id="@+id/txt_view_entry_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:hint="Update Entry"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/txt_view_current_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:hint="CurrentDate"
+        android:layout_margin="20dp"/>
+
+    <EditText
+        android:id="@+id/edt_view_subject"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:hint="Subject: "
+        android:paddingStart="10dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_margin="20dp"/>
+
+    <EditText
+        android:id="@+id/edt_view_entry"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="Entry: "
+        android:gravity="top"
+        android:padding="15dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_margin="20dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/btn_view_entry_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btn_update_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update Entry"
+            android:onClick="updateEntry"/>
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_delete_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:text="Delete"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:onClick="confirmDelete"/>
+</LinearLayout>
