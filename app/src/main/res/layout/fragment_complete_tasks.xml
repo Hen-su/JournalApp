@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CompleteTasksFragment"
+    android:id="@+id/frag_comp">
+
+    <Button
+        android:id="@+id/btn_ActiveTasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Active Tasks"
+        android:layout_centerHorizontal="true" />
+    <FrameLayout
+        android:id="@+id/completedTasksFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_completetask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"/>
+    </FrameLayout>
+
+
+</RelativeLayout>

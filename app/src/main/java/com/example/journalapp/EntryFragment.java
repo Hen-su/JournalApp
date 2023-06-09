@@ -1,8 +1,6 @@
 package com.example.journalapp;
 
-import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,10 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,14 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class EntryFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
     private EntryAdapter adapter;
-    private ArrayList<HashMap<String, String>> entryItemArrayList;
+    private ArrayList<EntryItem> entryItemArrayList;
     FloatingActionButton fab_add;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,17 +33,7 @@ public class EntryFragment extends Fragment {
         DbHandler db = new DbHandler(getContext());
         entryItemArrayList = db.getAllEntries();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        adapter = new EntryAdapter(entryItemArrayList, getContext(), new EntryAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(HashMap<String, String> entryItem) {
-                Intent intent = new Intent(getContext(), ViewEntryItem.class);
-                int entryID = Integer.valueOf(entryItem.get("id"));
-                Bundle extra = new Bundle();
-                extra.putInt("id", entryID);
-                intent.putExtras(extra);
-                startActivity(intent);
-            }
-        });
+        EntryAdapter adapter = createAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
@@ -57,11 +42,17 @@ public class EntryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), AddEntryActivity.class));
-
             }
         });
         setHasOptionsMenu(true);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EntryAdapter newAdapter= createAdapter();
+        recyclerView.setAdapter(newAdapter);
     }
 
     @Override
@@ -84,10 +75,19 @@ public class EntryFragment extends Fragment {
         });
     }
 
-
-    public void buildRecyclerView () {
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction().detach(this).commitNow();
-        fragmentManager.beginTransaction().attach(this).commitNow();
+    public EntryAdapter createAdapter()
+    {
+        adapter = new EntryAdapter(entryItemArrayList, getContext(), new EntryAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(EntryItem entryItem) {
+                Intent intent = new Intent(getContext(), ViewEntryItem.class);
+                int entryID = Integer.valueOf(entryItem.getId());
+                Bundle extra = new Bundle();
+                extra.putInt("id", entryID);
+                intent.putExtras(extra);
+                startActivity(intent);
+            }
+        });
+        return adapter;
     }
 }

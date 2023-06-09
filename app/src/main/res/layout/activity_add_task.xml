@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddTaskActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#6FFFFAD3"
+    android:id="@+id/act_add_task">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +42,8 @@
         <EditText
             android:id="@+id/edt_task_desc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
+            android:gravity="top"
             android:background="@drawable/edit_text_background"
             android:hint="Description"
             android:padding="15dp"
@@ -67,7 +70,8 @@
             android:id="@+id/btn_task_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"/>
+            android:text="Cancel"
+            android:layout_marginRight="30dp"/>
         <Button
             android:id="@+id/btn_add_task"
             android:layout_width="wrap_content"

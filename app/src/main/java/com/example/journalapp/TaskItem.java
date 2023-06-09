@@ -4,16 +4,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.Button;
 
 public class TaskItem {
-    String date, name, description, status;
-    Button btnDone;
-
-    public TaskItem (String date, String name, String description, String status) {
+    String date, name, description, status, reminderDate;
+    int id, notificationID;
+    public TaskItem (String date, String name, String description) {
+        this.id = id;
         this.date = date;
         this.name = name;
         this.description = description;
         this.status = status;
     }
     public TaskItem(){};
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getDate() {
         return date;
     }
@@ -46,4 +55,19 @@ public class TaskItem {
         this.status = status;
     }
 
+    public int getNotificationID() {
+        return notificationID;
+    }
+
+    public void setNotificationID(int notificationID) {
+        this.notificationID = notificationID;
+    }
+
+    public String getReminderDate() {
+        return reminderDate;
+    }
+
+    public void setReminderDate(String reminderDate) {
+        this.reminderDate = reminderDate;
+    }
 }

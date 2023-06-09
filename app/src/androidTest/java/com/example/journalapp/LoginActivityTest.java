@@ -60,7 +60,7 @@ public class LoginActivityTest {
         onView(withId(R.id.edt_email)).perform(typeText("testings"));
         onView(withId(R.id.edt_password)).perform(typeText("testings"));
         onView(withId(R.id.btn_login)).perform(click());
-        onView(withId(R.id.main)).check(matches(isDisplayed()));
+        onView(withId(R.id.act_main)).check(matches(isDisplayed()));
     }
 
     @After

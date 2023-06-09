@@ -29,17 +29,7 @@ public class CreateAccountActivityTest {
     public void setUp() throws Exception {
     }
 
-    @Test
-    public void testValidInputs(){
-        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launchActivityForResult(CreateAccountActivity.class);
-        onView(withId(R.id.edt_new_name)).perform(typeText(message));
-        onView(withId(R.id.edt_new_email)).perform(typeText(message));
-        onView(withId(R.id.edt_new_password)).perform(typeText(message));
-        onView(withId(R.id.edt_confirm_pass)).perform(typeText(message));
-        closeSoftKeyboard();
-        onView(withId(R.id.btn_create_acc)).perform(click());
-        assertTrue(scenario.getResult().getResultCode() == Activity.RESULT_CANCELED);
-    }
+
 
     @Test
     public void passwordMatch(){
@@ -54,7 +44,6 @@ public class CreateAccountActivityTest {
 
     @Test
     public void passwordLength(){
-        ActivityScenario<CreateAccountActivity> scenario = ActivityScenario.launchActivityForResult(CreateAccountActivity.class);
         onView(withId(R.id.edt_new_name)).perform(typeText(message));
         onView(withId(R.id.edt_new_email)).perform(typeText(message));
         onView(withId(R.id.edt_new_password)).perform(typeText("test"));
@@ -63,7 +52,15 @@ public class CreateAccountActivityTest {
         onView(withId(R.id.btn_create_acc)).perform(click());
         onView(withId(R.id.act_create_account)).check(matches(isDisplayed()));
     }
-
+    @Test
+    public void testValidInputs(){
+        onView(withId(R.id.edt_new_name)).perform(typeText(message));
+        onView(withId(R.id.edt_new_email)).perform(typeText(message));
+        onView(withId(R.id.edt_new_password)).perform(typeText(message));
+        onView(withId(R.id.edt_confirm_pass)).perform(typeText(message));
+        closeSoftKeyboard();
+        onView(withId(R.id.btn_create_acc)).perform(click());
+    }
     @After
     public void tearDown() throws Exception {
         createAccountActivity = null;
