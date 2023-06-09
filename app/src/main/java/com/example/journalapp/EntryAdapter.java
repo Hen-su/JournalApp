@@ -8,7 +8,6 @@ import android.widget.Filter;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,11 +15,11 @@ import java.util.List;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> {
 
-    private ArrayList<HashMap<String, String>> EntryItemArrayList;
-    private ArrayList<HashMap<String, String>> EntryItemArrayListFull;
+    private ArrayList<EntryItem> EntryItemArrayList;
+    private ArrayList<EntryItem> EntryItemArrayListFull;
     private EntryAdapter.ItemClickListener mitemClickListener;
 
-    public EntryAdapter(ArrayList<HashMap<String, String>> entryItemArrayList, Context context, ItemClickListener itemClickListener) {
+    public EntryAdapter(ArrayList<EntryItem> entryItemArrayList, Context context, ItemClickListener itemClickListener) {
         DbHandler db = new DbHandler(context.getApplicationContext());
         this.EntryItemArrayList = db.getAllEntries();
         this.EntryItemArrayListFull = new ArrayList<>(entryItemArrayList);
@@ -37,10 +36,10 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull EntryAdapter.ViewHolder holder, int position) {
-        HashMap<String, String> entryItem = EntryItemArrayList.get(position);
-        holder.date.setText(entryItem.get("date"));
-        holder.subject.setText(entryItem.get("subject"));
-        holder.entry.setText(entryItem.get("description"));
+        EntryItem entryItem = EntryItemArrayList.get(position);
+        holder.date.setText(entryItem.getDate());
+        holder.subject.setText(entryItem.getSubject());
+        holder.entry.setText(entryItem.getEntry());
 
         holder.itemView.setOnClickListener(view -> {
             mitemClickListener.onItemClick(entryItem);
@@ -66,7 +65,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
     }
 
     public interface ItemClickListener{
-        void onItemClick(HashMap<String, String> entryItem);
+        void onItemClick(EntryItem entryItem);
     }
 
     public Filter getFilter() {
@@ -75,15 +74,15 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.ViewHolder> 
     private Filter entryFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<HashMap<String, String>> filteredList = new ArrayList<>();
+            ArrayList<EntryItem> filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(EntryItemArrayListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (HashMap<String, String> item : EntryItemArrayListFull) {
-                    if (item.get("description").toLowerCase().contains(filterPattern)) {
+                for (EntryItem item : EntryItemArrayListFull) {
+                    if (item.getEntry().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

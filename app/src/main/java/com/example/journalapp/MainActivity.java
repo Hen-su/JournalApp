@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void logout(){
         session.setLoggedIn(false);
-        session.getUser().clear();
+        session.clearEditor();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }

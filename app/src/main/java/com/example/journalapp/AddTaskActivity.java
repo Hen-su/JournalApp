@@ -17,11 +17,13 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 public class AddTaskActivity extends AppCompatActivity {
     private Button btn_add_task, btn_cancel;
@@ -31,7 +33,6 @@ public class AddTaskActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener reminderdateSetListener;
     private TimePickerDialog.OnTimeSetListener remindertimeSetListener;
     private String dateTime;
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class AddTaskActivity extends AppCompatActivity {
         edt_name = findViewById(R.id.edt_task_name);
         edt_desc = findViewById(R.id.edt_task_desc);
         edt_reminder = findViewById(R.id.edt_task_reminder);
+        DbHandler db = new DbHandler(getApplicationContext());
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,38 +59,47 @@ public class AddTaskActivity extends AppCompatActivity {
                 String duedate = edt_date.getText().toString();
                 String subject = edt_name.getText().toString();
                 String description = edt_desc.getText().toString();
+                String reminderDate= edt_reminder.getText().toString();
+                int notification_id = 0;
+                String notificationDate = reminderDate;
                 if (!duedate.isEmpty() && !subject.isEmpty() && !description.isEmpty()) {
-                    DbHandler db = new DbHandler(getApplicationContext());
-                    db.insertTaskDetails(subject, description, duedate);
-                    if (edt_reminder.getText().toString()  != null){
+                    if (!reminderDate.isEmpty()){
                         //Set reminder
-                        String dateTime = edt_reminder.getText().toString();
-                        dateTime.replace('/', ',').replace(':', ',');
-                        String[] dateComponents = dateTime.split(",");
+                        reminderDate = reminderDate.replace('/', ',').replace(':', ',').replace(' ', ',');
+                        String[] dateComponents = reminderDate.split(",");
+
                         Calendar cal = Calendar.getInstance();
                         cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateComponents[0]));
-                        cal.set(Calendar.MONTH, Integer.parseInt(dateComponents[1]));
+                        cal.set(Calendar.MONTH, Integer.parseInt(dateComponents[1])-1);
                         cal.set(Calendar.YEAR, Integer.parseInt(dateComponents[2]));
                         cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dateComponents[3]));
                         cal.set(Calendar.MINUTE, Integer.parseInt(dateComponents[4]));
 
                         Intent myIntent1 = new Intent(getApplicationContext(), AlarmReceiver.class);
+                        UUID unique_id = UUID.randomUUID();
+                        notification_id = unique_id.hashCode();
+                        myIntent1.putExtra("notification_id", notification_id);
                         myIntent1.putExtra("subject", subject);
                         myIntent1.putExtra("description", description);
-                        myIntent1.putExtra("duedate", duedate);
-                        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), 123, myIntent1,
+                        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(), notification_id, myIntent1,
                                 PendingIntent.FLAG_UPDATE_CURRENT);
 
                         AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        alarmManager1.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+3000, pendingIntent1);
-                        db.insertTaskDetails(subject, description, duedate);
+                        alarmManager1.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent1);
+                        System.out.println(cal.getTime());
+                        System.out.println(cal.getTimeInMillis());
+                        System.out.println(notificationDate);
+                        System.out.println(notification_id);
                     }
+                    db.insertTaskDetails(subject, description, duedate, notificationDate, notification_id);
+
                     Toast.makeText(AddTaskActivity.this, "New Task added", Toast.LENGTH_LONG).show();
                     finish();
                 }
                 else {
                     Toast.makeText(AddTaskActivity.this, "Missing fields", Toast.LENGTH_LONG).show();
                 }
+
             }
         });
 
@@ -103,6 +114,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 DatePickerDialog dialog = new DatePickerDialog(AddTaskActivity.this,
                         android.R.style.Theme_Holo_Dialog_MinWidth, duedatedateSetListener, day, month, year);
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis());
                 dialog.show();
 
             }
@@ -127,7 +139,17 @@ public class AddTaskActivity extends AppCompatActivity {
 
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                String time = i+":"+i1;
+                String hour = String.valueOf(i);
+                String minute = String.valueOf(i1);
+                if (hour.length()==1)
+                {
+                    hour = "0"+hour;
+                }
+                if (minute.length()==1)
+                {
+                    minute = "0"+minute;
+                }
+                String time = hour+":"+minute;
                 dateTime += time;
                 edt_date.setText(dateTime);
             }
@@ -143,6 +165,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 DatePickerDialog dialog = new DatePickerDialog(AddTaskActivity.this,
                         android.R.style.Theme_Holo_Dialog_MinWidth, reminderdateSetListener, day, month, year);
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis());
                 dialog.show();
 
             }
@@ -152,7 +175,7 @@ public class AddTaskActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = day + "/" + month + "/" + year;
-                dateTime = date+"\n";
+                dateTime = date;
 
                 Calendar cal = Calendar.getInstance();
                 int hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -167,7 +190,17 @@ public class AddTaskActivity extends AppCompatActivity {
 
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                String time = i+":"+i1;
+                String hour = String.valueOf(i);
+                String minute = String.valueOf(i1);
+                if (hour.length()==1)
+                {
+                    hour = "0"+hour;
+                }
+                if (minute.length()==1)
+                {
+                    minute = "0"+minute;
+                }
+                String time = hour+":"+minute;
                 dateTime += " " + time;
                 edt_reminder.setText(dateTime);
             }

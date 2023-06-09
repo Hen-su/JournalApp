@@ -1,6 +1,5 @@
 package com.example.journalapp;
 
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,62 +19,50 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
+public class CompleteTasksFragment extends Fragment {
 
-public class TasksFragment extends Fragment {
     private RecyclerView recyclerView;
-    private TaskAdapter adapter;
+    private CompleteTaskAdapter adapter;
     private ArrayList<TaskItem> taskItemArrayList;
-    private Button btn_completeTasks;
-    private FloatingActionButton fab_add_task;
-    private FrameLayout frameLayout;
+    private Button btn_activeTasks, btn_delete;
     DbHandler db;
+
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tasks, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_complete_tasks, container, false);
         db = new DbHandler(getContext());
-        taskItemArrayList = db.getActiveTasks();
-        fab_add_task = (FloatingActionButton) view.findViewById(R.id.fab_add_task);
-        btn_completeTasks= view.findViewById(R.id.btn_completedTasks);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_task);
-        TaskAdapter adapter=createAdapter();
+        taskItemArrayList = db.getCompleteTasks();
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_completetask);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
-        CompleteTasksFragment completeTasksFragment = new CompleteTasksFragment();
-        btn_completeTasks.setOnClickListener(new View.OnClickListener() {
+        recyclerView.setAdapter(createAdapter());
+
+        TasksFragment tasksFragment = new TasksFragment();
+        btn_activeTasks=view.findViewById(R.id.btn_ActiveTasks);
+        btn_activeTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.framelayout, completeTasksFragment);
+                fragmentTransaction.replace(R.id.framelayout, tasksFragment);
                 fragmentTransaction.commit();
             }
         });
-
-        fab_add_task.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AddTaskActivity.class));
-            }
-        });
-        setHasOptionsMenu(true);
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        TaskAdapter newAdapter = createAdapter();
-        recyclerView.setAdapter(newAdapter);
+        recyclerView.setAdapter(createAdapter());
     }
 
     @Override
@@ -98,12 +85,12 @@ public class TasksFragment extends Fragment {
         });
     }
 
-    public TaskAdapter createAdapter(){
-        taskItemArrayList=db.getActiveTasks();
-        adapter = new TaskAdapter(taskItemArrayList, getContext(), new TaskAdapter.ItemClickListener() {
+    public CompleteTaskAdapter createAdapter(){
+        taskItemArrayList=db.getCompleteTasks();
+        adapter = new CompleteTaskAdapter(taskItemArrayList, getContext(), new CompleteTaskAdapter.ItemClickListener() {
             @Override
             public void onItemClick(TaskItem taskItem) {
-                Intent intent = new Intent(getContext(), ViewTaskItem.class);
+                Intent intent = new Intent(getContext(), ViewCompleteTaskItem.class);
                 int taskID = taskItem.getId();
                 Bundle extra = new Bundle();
                 extra.putInt("id", taskID);
@@ -112,10 +99,9 @@ public class TasksFragment extends Fragment {
             }
 
             @Override
-            public void onMarkDone(TaskItem taskItem) {
-                int taskID = taskItem.getId();
-                db.updateTaskStatus(taskID);
-                Toast.makeText(getContext(), "Task marked as done", Toast.LENGTH_SHORT).show();
+            public void onDeleteTask(TaskItem taskItem) {
+                int taskID=taskItem.getId();
+                db.deleteTask(taskID);
                 recyclerView.setAdapter(createAdapter());
             }
         });

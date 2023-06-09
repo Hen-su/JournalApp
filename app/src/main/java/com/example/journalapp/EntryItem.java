@@ -1,17 +1,28 @@
 package com.example.journalapp;
 
 public class EntryItem {
+    private int id;
         private String date;
         private String subject;
         private String entry;
 
         public EntryItem(String date, String subject, String entry) {
+            this.id = id;
             this.date = date;
             this.subject = subject;
             this.entry = entry;
         }
+        public EntryItem(){}
 
-        public String getDate() {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDate() {
             return date;
         }
 

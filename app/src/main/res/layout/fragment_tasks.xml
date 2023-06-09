@@ -4,16 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".TasksFragment">
+    tools:context=".TasksFragment"
+    android:id="@+id/frag_task">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_completedTasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Completed Tasks"
+        android:layout_centerHorizontal="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_task"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

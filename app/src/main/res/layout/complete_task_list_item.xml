@@ -35,13 +35,12 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_markdone"
+        android:id="@+id/btn_delete_completedTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="Mark as done"
+        android:text="Delete"
         android:textSize="15dp"
-        android:onClick="markDone"
-        android:backgroundTint="@android:color/holo_green_light"/>
+        android:backgroundTint="@android:color/holo_red_light" />
 
 </RelativeLayout>

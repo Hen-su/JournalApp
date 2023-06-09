@@ -7,11 +7,11 @@
     tools:context=".AddTaskActivity"
     android:orientation="vertical"
     android:background="#6FFFFAD3"
-    android:id="@+id/act_view_task">
+    android:id="@+id/act_view_completed">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update Task"
+        android:text="Completed Task"
         android:textSize="30dp"
         android:textStyle="bold"
         android:layout_margin="20dp"/>
@@ -19,8 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="20dp">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,47 +27,51 @@
             android:text="Due Date"
             android:textSize="20dp" />
         <EditText
-            android:id="@+id/edt_view_duedate"
+            android:id="@+id/edt_view_completeTaskduedate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
             android:hint="Select due date:"
             android:focusable="false"
-            android:padding="10dp"
-            android:layout_margin="20dp"/>
+            android:padding="15dp"
+            android:layout_margin="20dp"
+            android:inputType="none"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Subject"
             android:textSize="20dp" />
         <EditText
-            android:id="@+id/edt_view_taskname"
+            android:id="@+id/edt_view_completeTaskname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
             android:hint="Task name:"
-            android:padding="10dp"
-            android:layout_margin="20dp"/>
+            android:padding="15dp"
+            android:layout_margin="20dp"
+            android:inputType="none"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Description"
             android:textSize="20dp" />
         <EditText
-            android:id="@+id/edt_view_taskdesc"
+            android:id="@+id/edt_view_completeTaskdesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
             android:hint="Description"
-            android:padding="10dp"
-            android:layout_margin="20dp"/>
+            android:padding="15dp"
+            android:layout_margin="20dp"
+            android:inputType="none"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="Reminder"/>
         <EditText
-            android:id="@+id/edt_view_taskreminder"
+            android:id="@+id/edt_view_completeTaskReminder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_background"
@@ -77,35 +80,22 @@
             android:layout_margin="20dp"
             android:focusable="false"/>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="20dp">
         <Button
-            android:id="@+id/btn_view_task_cancel"
+            android:id="@+id/btn_view_completeTask_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:layout_marginRight="30dp"/>
-        <Button
-            android:id="@+id/btn_view_update_task"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Update Task"
-            android:onClick="updateTask"/>
-    </LinearLayout>
+            android:layout_gravity="center"/>
     <Button
-        android:id="@+id/btn_delete_task"
+        android:id="@+id/btn_restore_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="25dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:text="Delete"
-        android:backgroundTint="@android:color/holo_red_light"
+        android:text="Restore"
+        android:backgroundTint="@android:color/holo_green_light"
         android:onClick="deleteTask" />
 
 </LinearLayout>

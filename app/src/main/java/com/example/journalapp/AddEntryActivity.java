@@ -11,9 +11,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class AddEntryActivity extends AppCompatActivity {
 
@@ -68,19 +71,10 @@ public class AddEntryActivity extends AppCompatActivity {
     }
 
     private String getCurrentDate(){
-        LocalDate date = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            date = LocalDate.now();
-        }
-        DateTimeFormatter dateTimeFormatter = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            dateTimeFormatter = DateTimeFormatter.ofPattern("E, dd MMM YYYY");
-        }
-        String currentDate = date.toString();
-        String formattedDate = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            formattedDate = date.format(dateTimeFormatter).toString();
-        }
+        Calendar cal = Calendar.getInstance();
+        Date date=cal.getTime();
+        SimpleDateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy\nHH:mm", Locale.getDefault());
+        String formattedDate = df.format(date);
         return formattedDate;
     }
 }

@@ -5,9 +5,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public class User {
+    private int id;
     private String name;
     private String email;
     private String password;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return this.name;
@@ -37,4 +46,5 @@ public class User {
         this.email = email;
         this.password = password;
     }
+    public User(){}
 }

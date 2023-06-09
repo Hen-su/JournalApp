@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
-    android:id="@+id/act_login">
+    android:id="@+id/act_login"
+    android:background="#6FFFFAD3">
 
     <ImageView
         android:id="@+id/img_login"
@@ -57,7 +58,8 @@
             android:text="@string/btn_login"
             android:onClick="Login"
             android:backgroundTint="@color/purple_500"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:layout_marginBottom="15dp"/>
 
         <Button
             android:id="@+id/btn_forgot_password"

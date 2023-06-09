@@ -23,17 +23,14 @@ public class Session {
         editor.commit();
     }
 
-    public void setUser(HashMap<String, String> userData){
-        editor.putString(KEY_ID, userData.get("id"));
-        editor.putString(KEY_NAME, userData.get("name"));
+    public void setUser(User userData){
+        editor.putInt(KEY_ID, userData.getId());
+        editor.putString(KEY_NAME, userData.getName());
         editor.commit();
     }
 
-    public HashMap<String, String> getUser(){
-        HashMap<String, String> user = new HashMap<>();
-        user.put(KEY_ID, prefs.getString(KEY_ID, null));
-        user.put(KEY_NAME, prefs.getString(KEY_NAME, null));
-        return user;
+    public void clearEditor(){
+        editor.clear();
     }
     public boolean loggedIn(){
         return prefs.getBoolean("loggedInMode", false);
